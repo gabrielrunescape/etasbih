@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.etasbih">
+    package="br.grs.etasbih">
    <application
-        android:label="etasbih"
+        android:label="e-Tasbih"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

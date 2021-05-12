@@ -6,59 +6,58 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int rounds = 0;
-  int general = 0;
-  int _counter = 0;
+  bool selected = false;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragDown: (details) {
-        double half = MediaQuery.of(context).size.width / 2;
+    return Scaffold(body: layoutArea(context));
+  }
 
-        if (details.localPosition.dx > half) {
-          setState(() {
-            general++;
-            _counter++;
+  Widget layoutArea(BuildContext context) {
+    Duration duration = Duration(milliseconds: 250);
+    double width = MediaQuery.of(context).size.width;
+    double height = (MediaQuery.of(context).size.height - 100) / 2;
 
-            if (_counter > 33) {
-              rounds++;
-              _counter = 0;
-            }
-          });
-        } else if (details.globalPosition.dx < half) {
-          setState(() {
-            general--;
-            _counter--;
-
-            if (_counter < 0) {
-              _counter = 0;
-              if (general > 0 && rounds > 0) {
-                rounds--;
-              }
-            }
-          });
-        }
-      },
-      child: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Vi multfoje premis la butonon:',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-              Text(
-                'Vi prenis $rounds rondirojn',
-                style: Theme.of(context).textTheme.headline6,
-              ),
+    Row child = Row(
+      children: selected
+          ? [
+              Image(image: AssetImage("assets/green_bead.png")),
+              Image(image: AssetImage("assets/green_bead.png")),
+            ]
+          : [
+              Image(image: AssetImage("assets/green_bead.png")),
+              Image(image: AssetImage("assets/green_bead.png")),
             ],
-          ),
+    );
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selected = !selected;
+        });
+      },
+      child: Center(
+        child: Stack(
+          children: <Widget>[
+            AnimatedPositioned(
+              child: child,
+              bottom: height,
+              duration: duration,
+              left: selected ? -50 : -150,
+            ),
+            AnimatedPositioned(
+              child: child,
+              bottom: height,
+              duration: duration,
+              right: selected ? -150 : -50,
+            ),
+            AnimatedPositioned(
+              top: height,
+              duration: duration,
+              child: Image.asset("assets/gray_bead.png"),
+              left: selected ? (width - 150) : 50,
+            ),
+          ],
         ),
       ),
     );
